@@ -1,0 +1,14 @@
+name: macos-test
+
+on: [push]
+
+jobs:
+  install-edge:
+    runs-on: macos-latest
+
+    steps:
+    - name: Install Microsoft Edge
+      run: brew install --cask microsoft-edge
+
+    - name: Verify Edge Installation
+      run: /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version
