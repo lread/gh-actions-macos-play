@@ -12,3 +12,20 @@ jobs:
 
     - name: Verify Edge Installation
       run: /Applications/Microsoft\ Edge.app/Contents/MacOS/Microsoft\ Edge --version
+
+    - name: Get Edge Version
+      run: |
+        EDGE_VERSION=$(defaults read /Applications/Microsoft\ Edge.app/Contents/Info CFBundleShortVersionString)
+        echo "EDGE_VERSION=$EDGE_VERSION" >> $GITHUB_ENV
+
+    - name: Download and Setup msedgedriver
+      run: |
+        DRIVER_URL="https://msedgedriver.azureedge.net/${{ env.EDGE_VERSION }}/edgedriver_mac64_m1.zip"
+        curl -o msedgedriver.zip $DRIVER_URL
+        mkdir $RUNNER_TEMP/edgedriver
+        unzip msedgedriver.zip -d $RUNNER_TEMP/edgedriver
+        echo "$RUNNER_TEMP/edgedriver" >> $GITHUB_PATH
+
+    - name: Test msedgedriver
+      run: |
+        msedgedriver --version
